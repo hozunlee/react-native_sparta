@@ -4,36 +4,35 @@ import {
     Text,
     View,
     Image,
-    Alert,
     TouchableOpacity,
     ScrollView,
 } from "react-native";
-import main from "./assets/main.png";
 
+const main =
+    "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
 import data from "./data.json";
 
 export default function App() {
-    console.disableYellowBox = true;
-
-    const customAlert = (params) => {
-        Alert.alert("클릭 완료");
-    };
+    let tip = data.tip;
+    let todayWeather = 10 + 17;
+    let todayCondition = "흐림";
+    //return 구문 밖에서는 슬래시 두개 방식으로 주석
     return (
+        /*
+      return 구문 안에서는 {슬래시 + * 방식으로 주석
+    */
         <ScrollView style={styles.container}>
             <Text style={styles.title}>나만의 꿀팁</Text>
-            <Image
-                source={{
-                    uri: "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c",
-                }}
-                resizeMode={"contain"}
-                style={styles.imageStyle}
-            />
+            <Text style={styles.weather}>
+                오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
+            </Text>
+            <Image style={styles.mainImage} source={{ uri: main }} />
             <ScrollView
-                style={styles.middleCon}
+                style={styles.middleContainer}
                 horizontal
                 indicatorStyle={"white"}
             >
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.middleButton01}>
                     <Text style={styles.middleButtonText}>생활</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.middleButton02}>
@@ -46,26 +45,32 @@ export default function App() {
                     <Text style={styles.middleButtonText}>꿀팁 찜</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <View style={styles.secondContainer}>
-                <Image
-                    source={{
-                        uri: "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fpizza.png?alt=media&token=1a099927-d818-45d4-b48a-7906fd0d2ad3",
-                    }}
-                    style={styles.imageStyle1}
-                />
-                <View style={styles.containerOne}>
-                    <Text style={styles.subTitle}>
-                        먹다 남은 피자를 촉촉하게!
-                    </Text>
-                    <Text style={styles.subText} numberOfLines={3}>
-                        먹다 남은 피자는 수분이 날라가기 때문에 처음처럼 맛있게
-                        먹을 수 없는데요. 이럴 경우 그릇에 물을 받아 전자레인지
-                        안에서 1분 30초에서 2분 정도 함께 돌려주면 촉촉하게 먹을
-                        수 있습니다. 물이 전자레인지 안에서 수증기를 일으키고,
-                        피자에 촉촉함을 더해줍니다.
-                    </Text>
-                    <Text style={styles.daily}>2022.04.13</Text>
-                </View>
+            <View style={styles.cardContainer}>
+                {/* 하나의 카드 영역을 나타내는 View */}
+                {tip.map((content, i) => {
+                    return (
+                        <View style={styles.card} key={i}>
+                            <Image
+                                style={styles.cardImage}
+                                source={{ uri: content.image }}
+                            />
+                            <View style={styles.cardText}>
+                                <Text
+                                    style={styles.cardTitle}
+                                    numberOfLines={1}
+                                >
+                                    {content.title}
+                                </Text>
+                                <Text style={styles.cardDesc} numberOfLines={3}>
+                                    {content.desc}
+                                </Text>
+                                <Text style={styles.cardDate}>
+                                    {content.date}
+                                </Text>
+                            </View>
+                        </View>
+                    );
+                })}
             </View>
         </ScrollView>
     );
@@ -73,101 +78,34 @@ export default function App() {
 
 const styles = StyleSheet.create({
     container: {
+        //앱의 배경 색
         backgroundColor: "#fff",
     },
-    secondContainer: {
-        flexDirection: "row",
-    },
-    middleCon: {
-        marginVertical: 20,
-        marginLeft: 10,
-        height: 60,
-    },
-
-    containerOne: {
-        flex: 2,
-        marginLeft: 3,
-    },
-    imageStyle: {
-        width: "90%",
-        height: 200,
-        borderRadius: 10,
-        margin: 10,
-        alignSelf: "center",
-    },
-    imageStyle1: {
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-        margin: 5,
-        flex: 1,
-    },
-    btn: {
-        margin: 7,
-        padding: 15,
-        borderRadius: 20,
-        height: 50,
-        width: 100,
-        backgroundColor: "red",
-    },
-    btn2: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-
-        height: 50,
-        width: "30%",
-        textAlign: "center",
-        backgroundColor: "blue",
-        color: "#fff",
-    },
-    btn3: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-
-        height: 50,
-        width: "30%",
-        textAlign: "center",
-        backgroundColor: "grey",
-        color: "#fff",
-    },
-    btn4: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-
-        height: 50,
-        width: "30%",
-        textAlign: "center",
-        backgroundColor: "yellow",
-        color: "#fff",
-    },
-
-    btnText: {
-        color: "#fff",
-        textAlign: "center",
-    },
-
-    imgText: {
-        flex: 1,
-    },
     title: {
-        fontSize: 50,
-        marginTop: 30,
-        marginLeft: 20,
-        fontWeight: "bold",
-    },
-    subTitle: {
+        //폰트 사이즈
         fontSize: 20,
-        fontWeight: "bold",
+        //폰트 두께
+        fontWeight: "700",
+        //위 공간으로 부터 이격
+        marginTop: 50,
+        //왼쪽 공간으로 부터 이격
+        marginLeft: 20,
     },
-    subText: {
-        fontSize: 16,
+    weather: {
+        alignSelf: "flex-end",
+        paddingRight: 20,
     },
-    daily: {
-        color: "grey",
-        fontSize: 13,
+    mainImage: {
+        //컨텐츠의 넓이 값
+        width: "90%",
+        //컨텐츠의 높이 값
+        height: 200,
+        //컨텐츠의 모서리 구부리기
+        borderRadius: 10,
+        marginTop: 20,
+        //컨텐츠 자체가 앱에서 어떤 곳에 위치시킬지 결정(정렬기능)
+        //각 속성의 값들은 공식문서에 고대로~ 나와 있음
+        alignSelf: "center",
     },
     middleContainer: {
         marginTop: 20,
@@ -199,6 +137,12 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 7,
     },
+    middleButtonText: {
+        color: "#fff",
+        fontWeight: "700",
+        //텍스트의 현재 위치에서의 정렬
+        textAlign: "center",
+    },
     middleButton04: {
         width: 100,
         height: 50,
@@ -207,10 +151,40 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 7,
     },
-    middleButtonText: {
-        color: "#fff",
+    cardContainer: {
+        marginTop: 10,
+        marginLeft: 10,
+    },
+    card: {
+        flex: 1,
+        //컨텐츠들을 가로로 나열
+        //세로로 나열은 column <- 디폴트 값임
+        flexDirection: "row",
+        margin: 10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: "#eee",
+        paddingBottom: 10,
+    },
+    cardImage: {
+        flex: 1,
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+    },
+    cardText: {
+        flex: 2,
+        flexDirection: "column",
+        marginLeft: 10,
+    },
+    cardTitle: {
+        fontSize: 20,
         fontWeight: "700",
-        //텍스트의 현재 위치에서의 정렬
-        textAlign: "center",
+    },
+    cardDesc: {
+        fontSize: 15,
+    },
+    cardDate: {
+        fontSize: 10,
+        color: "#A6A6A6",
     },
 });
