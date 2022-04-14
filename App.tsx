@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import main from "./assets/main.png";
 
+import data from "./data.json";
+
 export default function App() {
     console.disableYellowBox = true;
 
@@ -26,18 +28,22 @@ export default function App() {
                 resizeMode={"contain"}
                 style={styles.imageStyle}
             />
-            <ScrollView style={styles.middleCon} horizontal>
-                <TouchableOpacity style={styles.btn} onPress={customAlert}>
-                    <Text style={styles.btnText}>생활</Text>
+            <ScrollView
+                style={styles.middleCon}
+                horizontal
+                indicatorStyle={"white"}
+            >
+                <TouchableOpacity style={styles.btn}>
+                    <Text style={styles.middleButtonText}>생활</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn2} onPress={customAlert}>
-                    <Text style={styles.btnText}>재테크</Text>
+                <TouchableOpacity style={styles.middleButton02}>
+                    <Text style={styles.middleButtonText}>재테크</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn3} onPress={customAlert}>
-                    <Text style={styles.btnText}>반려견</Text>
+                <TouchableOpacity style={styles.middleButton03}>
+                    <Text style={styles.middleButtonText}>반려견</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn4} onPress={customAlert}>
-                    <Text style={styles.btnText}>꿀팁</Text>
+                <TouchableOpacity style={styles.middleButton04}>
+                    <Text style={styles.middleButtonText}>꿀팁 찜</Text>
                 </TouchableOpacity>
             </ScrollView>
             <View style={styles.secondContainer}>
@@ -97,15 +103,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     btn: {
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
-
+        margin: 7,
+        padding: 15,
+        borderRadius: 20,
         height: 50,
-        width: "30%",
-        textAlign: "center",
+        width: 100,
         backgroundColor: "red",
-        color: "#fff",
     },
     btn2: {
         margin: 10,
@@ -165,5 +168,49 @@ const styles = StyleSheet.create({
     daily: {
         color: "grey",
         fontSize: 13,
+    },
+    middleContainer: {
+        marginTop: 20,
+        marginLeft: 10,
+        height: 60,
+    },
+    middleButton01: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#fdc453",
+        borderColor: "deeppink",
+        borderRadius: 15,
+        margin: 7,
+    },
+    middleButton02: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#fe8d6f",
+        borderRadius: 15,
+        margin: 7,
+    },
+    middleButton03: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#9adbc5",
+        borderRadius: 15,
+        margin: 7,
+    },
+    middleButton04: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#f886a8",
+        borderRadius: 15,
+        margin: 7,
+    },
+    middleButtonText: {
+        color: "#fff",
+        fontWeight: "700",
+        //텍스트의 현재 위치에서의 정렬
+        textAlign: "center",
     },
 });
