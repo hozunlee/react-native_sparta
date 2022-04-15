@@ -37,7 +37,7 @@ export default function DetailPage() {
 const styles = StyleSheet.create({
     container: {
         //앱의 배경 색
-        backgroundColor: "#fff",
+        backgroundColor: "black",
         height: "100%",
     },
     mainImage: {
@@ -52,11 +52,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
         margin: 20,
+        color: "white",
     },
     subText: {
         fontSize: 15,
         textAlign: "center",
         margin: 5,
+        color: "white",
     },
     btn: {
         width: 100,
