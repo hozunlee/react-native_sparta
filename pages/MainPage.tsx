@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import main from "../assets/main.png";
 import {
     StyleSheet,
     Text,
@@ -7,30 +8,30 @@ import {
     TouchableOpacity,
     ScrollView,
 } from "react-native";
-
-const main =
-    "https://storage.googleapis.com/sparta-image.appspot.com/lecture/main.png";
 import data from "../data.json";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
+import { StatusBar } from "expo-status-bar";
 
 export default function MainPage() {
     console.disableYellowBox = true;
+    //return 구문 밖에서는 슬래시 두개 방식으로 주석
 
-    //useState 사용법
-    //[state,setState] 에서 state는 이 컴포넌트에서 관리될 상태 데이터를 담고 있는 변수
-    //setState는 state를 변경시킬때 사용해야하는 함수
-
-    //모두 다 useState가 선물해줌
-    //useState()안에 전달되는 값은 state 초기값
+    //기존 꿀팁을 저장하고 있을 상태
     const [state, setState] = useState([]);
-    const [ready, setReady] = useState(true);
+    //카테고리에 따라 다른 꿀팁을 그때그때 저장관리할 상태
     const [cateState, setCateState] = useState([]);
 
-    //하단의 return 문이 실행되어 화면이 그려진다음 실행되는 useEffect 함수
-    //내부에서 data.json으로 부터 가져온 데이터를 state 상태에 담고 있음
+    //컴포넌트에 상태를 여러개 만들어도 됨
+    //관리할 상태이름과 함수는 자유자재로 정의할 수 있음
+    //초기 상태값으로 리스트, 참거짓형, 딕셔너리, 숫자, 문자 등등 다양하게 들어갈 수 있음.
+    const [ready, setReady] = useState(true);
+
     useEffect(() => {
+        //뒤의 1000 숫자는 1초를 뜻함
+        //1초 뒤에 실행되는 코드들이 담겨 있는 함수
         setTimeout(() => {
+            //꿀팁 데이터로 모두 초기화 준비
             let tip = data.tip;
             setState(tip);
             setCateState(tip);
@@ -38,17 +39,14 @@ export default function MainPage() {
         }, 1000);
     }, []);
 
-    //   let tip = data.tip;
-    //data.json 데이터는 state에 담기므로 상태에서 꺼내옴
-
-    const category = (cate: string) => {
-        if (cate === "전체보기") {
+    const category = (cate) => {
+        if (cate == "전체보기") {
             //전체보기면 원래 꿀팁 데이터를 담고 있는 상태값으로 다시 초기화
             setCateState(state);
         } else {
             setCateState(
                 state.filter((d) => {
-                    return d.category === cate;
+                    return d.category == cate;
                 })
             );
         }
@@ -56,7 +54,9 @@ export default function MainPage() {
 
     let todayWeather = 10 + 17;
     let todayCondition = "흐림";
-    //return 구문 밖에서는 슬래시 두개 방식으로 주석
+
+    //처음 ready 상태값은 true 이므로 ? 물음표 바로 뒤에 값이 반환(그려짐)됨
+    //useEffect로 인해 데이터가 준비되고, ready 값이 변경되면 : 콜론 뒤의 값이 반환(그려짐)
     return ready ? (
         <Loading />
     ) : (
@@ -64,11 +64,12 @@ export default function MainPage() {
       return 구문 안에서는 {슬래시 + * 방식으로 주석
     */
         <ScrollView style={styles.container}>
+            <StatusBar style="black" />
             <Text style={styles.title}>나만의 꿀팁</Text>
             <Text style={styles.weather}>
                 오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
             </Text>
-            <Image style={styles.mainImage} source={{ uri: main }} />
+            <Image style={styles.mainImage} source={main} />
             <ScrollView
                 style={styles.middleContainer}
                 horizontal
@@ -115,18 +116,9 @@ export default function MainPage() {
                     <Text style={styles.middleButtonText}>꿀팁 찜</Text>
                 </TouchableOpacity>
             </ScrollView>
-
             <View style={styles.cardContainer}>
                 {/* 하나의 카드 영역을 나타내는 View */}
                 {cateState.map((content, i) => {
-                    // return (<View style={styles.card} key={i}>
-                    //   <Image style={styles.cardImage} source={{uri:content.image}}/>
-                    //   <View style={styles.cardText}>
-                    //     <Text style={styles.cardTitle} numberOfLines={1}>{content.title}</Text>
-                    //     <Text style={styles.cardDesc} numberOfLines={3}>{content.desc}</Text>
-                    //     <Text style={styles.cardDate}>{content.date}</Text>
-                    //   </View>
-                    // </View>)
                     return <Card content={content} key={i} />;
                 })}
             </View>
