@@ -1,4 +1,5 @@
 import React from "react";
+import { useTailwind } from "tailwind-rn";
 import main from "./assets/main.png";
 import {
     StyleSheet,
@@ -13,6 +14,7 @@ import data from "../data.json";
 export default function DetailPage() {
     console.disableYellowBox = true;
     let tip = data.tip;
+    const tailwind = useTailwind();
 
     return (
         <View style={styles.container}>
@@ -23,7 +25,7 @@ export default function DetailPage() {
                     uri: tip[9].image,
                 }}
             />
-            <View>
+            <View style={styles.textContainer}>
                 <Text style={styles.mainText}>{tip[9].title}</Text>
                 <Text style={styles.subText}>{tip[9].desc}</Text>
                 <TouchableOpacity style={styles.btn}>
@@ -44,6 +46,7 @@ const styles = StyleSheet.create({
         width: "90%",
         height: "40%",
         alignSelf: "center",
+        margin: 10,
         marginTop: 30,
         borderRadius: 10,
     },
@@ -68,10 +71,13 @@ const styles = StyleSheet.create({
         borderColor: "deeppink",
         borderRadius: 15,
         margin: 7,
-        alignSelf: "center",
     },
     btnText: {
         textAlign: "center",
         color: "white",
+    },
+    textContainer: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

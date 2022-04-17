@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     StyleSheet,
     Text,
@@ -9,17 +9,57 @@ import {
 } from "react-native";
 
 const main =
-    "https://firebasestorage.googleapis.com/v0/b/sparta-image.appspot.com/o/lecture%2Fmain.png?alt=media&token=8e5eb78d-19ee-4359-9209-347d125b322c";
+    "https://storage.googleapis.com/sparta-image.appspot.com/lecture/main.png";
 import data from "../data.json";
+import Card from "../components/Card";
+import Loading from "../components/Loading";
 
 export default function MainPage() {
     console.disableYellowBox = true;
 
-    let tip = data.tip;
+    //useState 사용법
+    //[state,setState] 에서 state는 이 컴포넌트에서 관리될 상태 데이터를 담고 있는 변수
+    //setState는 state를 변경시킬때 사용해야하는 함수
+
+    //모두 다 useState가 선물해줌
+    //useState()안에 전달되는 값은 state 초기값
+    const [state, setState] = useState([]);
+    const [ready, setReady] = useState(true);
+    const [cateState, setCateState] = useState([]);
+
+    //하단의 return 문이 실행되어 화면이 그려진다음 실행되는 useEffect 함수
+    //내부에서 data.json으로 부터 가져온 데이터를 state 상태에 담고 있음
+    useEffect(() => {
+        setTimeout(() => {
+            let tip = data.tip;
+            setState(tip);
+            setCateState(tip);
+            setReady(false);
+        }, 1000);
+    }, []);
+
+    //   let tip = data.tip;
+    //data.json 데이터는 state에 담기므로 상태에서 꺼내옴
+
+    const category = (cate: string) => {
+        if (cate === "전체보기") {
+            //전체보기면 원래 꿀팁 데이터를 담고 있는 상태값으로 다시 초기화
+            setCateState(state);
+        } else {
+            setCateState(
+                state.filter((d) => {
+                    return d.category === cate;
+                })
+            );
+        }
+    };
+
     let todayWeather = 10 + 17;
     let todayCondition = "흐림";
     //return 구문 밖에서는 슬래시 두개 방식으로 주석
-    return (
+    return ready ? (
+        <Loading />
+    ) : (
         /*
       return 구문 안에서는 {슬래시 + * 방식으로 주석
     */
@@ -34,44 +74,60 @@ export default function MainPage() {
                 horizontal
                 indicatorStyle={"white"}
             >
-                <TouchableOpacity style={styles.middleButton01}>
+                <TouchableOpacity
+                    style={styles.middleButtonAll}
+                    onPress={() => {
+                        category("전체보기");
+                    }}
+                >
+                    <Text style={styles.middleButtonTextAll}>전체보기</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.middleButton01}
+                    onPress={() => {
+                        category("생활");
+                    }}
+                >
                     <Text style={styles.middleButtonText}>생활</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.middleButton02}>
+                <TouchableOpacity
+                    style={styles.middleButton02}
+                    onPress={() => {
+                        category("재테크");
+                    }}
+                >
                     <Text style={styles.middleButtonText}>재테크</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.middleButton03}>
+                <TouchableOpacity
+                    style={styles.middleButton03}
+                    onPress={() => {
+                        category("반려견");
+                    }}
+                >
                     <Text style={styles.middleButtonText}>반려견</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.middleButton04}>
+                <TouchableOpacity
+                    style={styles.middleButton04}
+                    onPress={() => {
+                        category("꿀팁 찜");
+                    }}
+                >
                     <Text style={styles.middleButtonText}>꿀팁 찜</Text>
                 </TouchableOpacity>
             </ScrollView>
+
             <View style={styles.cardContainer}>
                 {/* 하나의 카드 영역을 나타내는 View */}
-                {tip.map((content, i) => {
-                    return (
-                        <View style={styles.card} key={i}>
-                            <Image
-                                style={styles.cardImage}
-                                source={{ uri: content.image }}
-                            />
-                            <View style={styles.cardText}>
-                                <Text
-                                    style={styles.cardTitle}
-                                    numberOfLines={1}
-                                >
-                                    {content.title}
-                                </Text>
-                                <Text style={styles.cardDesc} numberOfLines={3}>
-                                    {content.desc}
-                                </Text>
-                                <Text style={styles.cardDate}>
-                                    {content.date}
-                                </Text>
-                            </View>
-                        </View>
-                    );
+                {cateState.map((content, i) => {
+                    // return (<View style={styles.card} key={i}>
+                    //   <Image style={styles.cardImage} source={{uri:content.image}}/>
+                    //   <View style={styles.cardText}>
+                    //     <Text style={styles.cardTitle} numberOfLines={1}>{content.title}</Text>
+                    //     <Text style={styles.cardDesc} numberOfLines={3}>{content.desc}</Text>
+                    //     <Text style={styles.cardDate}>{content.date}</Text>
+                    //   </View>
+                    // </View>)
+                    return <Card content={content} key={i} />;
                 })}
             </View>
         </ScrollView>
@@ -114,6 +170,15 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         height: 60,
     },
+    middleButtonAll: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#20b2aa",
+        borderColor: "deeppink",
+        borderRadius: 15,
+        margin: 7,
+    },
     middleButton01: {
         width: 100,
         height: 50,
@@ -139,12 +204,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 7,
     },
-    middleButtonText: {
-        color: "#fff",
-        fontWeight: "700",
-        //텍스트의 현재 위치에서의 정렬
-        textAlign: "center",
-    },
     middleButton04: {
         width: 100,
         height: 50,
@@ -153,40 +212,20 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 7,
     },
+    middleButtonText: {
+        color: "#fff",
+        fontWeight: "700",
+        //텍스트의 현재 위치에서의 정렬
+        textAlign: "center",
+    },
+    middleButtonTextAll: {
+        color: "#fff",
+        fontWeight: "700",
+        //텍스트의 현재 위치에서의 정렬
+        textAlign: "center",
+    },
     cardContainer: {
         marginTop: 10,
         marginLeft: 10,
-    },
-    card: {
-        flex: 1,
-        //컨텐츠들을 가로로 나열
-        //세로로 나열은 column <- 디폴트 값임
-        flexDirection: "row",
-        margin: 10,
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#eee",
-        paddingBottom: 10,
-    },
-    cardImage: {
-        flex: 1,
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-    },
-    cardText: {
-        flex: 2,
-        flexDirection: "column",
-        marginLeft: 10,
-    },
-    cardTitle: {
-        fontSize: 20,
-        fontWeight: "700",
-    },
-    cardDesc: {
-        fontSize: 15,
-    },
-    cardDate: {
-        fontSize: 10,
-        color: "#A6A6A6",
     },
 });
