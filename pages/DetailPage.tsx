@@ -7,8 +7,11 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
+    Alert,
+    Share,
 } from "react-native";
 import data from "../data.json";
+import * as Linking from "expo-linking";
 
 export default function DetailPage({ navigation, route }) {
     console.disableYellowBox = true;
@@ -32,6 +35,20 @@ export default function DetailPage({ navigation, route }) {
         setTip(route.params);
     }, []);
 
+    const popup = () => {
+        Alert.alert("팝업!!");
+    };
+
+    const share = () => {
+        Share.share({
+            message: `${tip.title} \n\n ${tip.desc} \n\n ${tip.image}`,
+        });
+    };
+
+    const link = () => {
+        Linking.openURL("https://velog.io/@ho2yahh");
+    };
+
     return (
         <View style={styles.container}>
             <Image
@@ -44,9 +61,23 @@ export default function DetailPage({ navigation, route }) {
             <View style={styles.textContainer}>
                 <Text style={styles.mainText}>{tip.title}</Text>
                 <Text style={styles.subText}>{tip.desc}</Text>
-                <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.btnText}>팁 찜하기</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => popup()}
+                    >
+                        <Text style={styles.btnText}>팁 찜하기</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => share()}
+                    >
+                        <Text style={styles.btnText}>팁 공유하기</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btn} onPress={() => link()}>
+                        <Text style={styles.btnText}>외부 링크</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -88,6 +119,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         margin: 7,
     },
+
     btnText: {
         textAlign: "center",
         color: "white",
@@ -95,5 +127,8 @@ const styles = StyleSheet.create({
     textContainer: {
         justifyContent: "center",
         alignItems: "center",
+    },
+    buttonGroup: {
+        flexDirection: "row",
     },
 });
