@@ -67,8 +67,16 @@ export default function MainPage({ navigation, route }) {
     */
         <ScrollView style={styles.container}>
             <Text style={styles.weather}>
-                오늘의 날씨: {todayWeather + "°C " + todayCondition}{" "}
+                오늘의 날씨: {todayWeather + "°C " + todayCondition}
             </Text>
+            <View>
+                <TouchableOpacity
+                    style={styles.aboutBtn}
+                    onPress={() => navigation.navigate("AboutPage")}
+                >
+                    <Text style={styles.btnText}> 소개페이지</Text>
+                </TouchableOpacity>
+            </View>
             <Image style={styles.mainImage} source={main} />
             <ScrollView
                 style={styles.middleContainer}
@@ -225,5 +233,30 @@ const styles = StyleSheet.create({
     cardContainer: {
         marginTop: 10,
         marginLeft: 10,
+    },
+
+    btn: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#fdc453",
+        borderColor: "deeppink",
+        borderRadius: 15,
+        margin: 7,
+    },
+    aboutBtn: {
+        width: 100,
+        height: 50,
+        padding: 15,
+        backgroundColor: "#219ebc",
+        borderColor: "deeppink",
+        borderRadius: 15,
+        margin: 7,
+        alignSelf: "flex-end",
+    },
+
+    btnText: {
+        textAlign: "center",
+        color: "white",
     },
 });

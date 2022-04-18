@@ -13,6 +13,8 @@ import {
 import data from "../data.json";
 import * as Linking from "expo-linking";
 
+import { StatusBar } from "expo-status-bar";
+
 export default function DetailPage({ navigation, route }) {
     console.disableYellowBox = true;
 
@@ -51,6 +53,7 @@ export default function DetailPage({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <StatusBar style="light" />
             <Image
                 style={styles.mainImage}
                 resizeMode={"cover"}
