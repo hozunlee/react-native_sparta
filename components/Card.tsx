@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 interface IProps {
     content: IContents;
@@ -16,9 +16,14 @@ interface IContents {
 
 //비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
 
-export default function Card({ content }: IProps) {
+export default function Card({ content, navigation }: IProps) {
     return (
-        <View style={styles.card}>
+        <TouchableOpacity
+            style={styles.card}
+            onPress={() => {
+                navigation.navigate("DetailPage", content);
+            }}
+        >
             <Image style={styles.cardImage} source={{ uri: content.image }} />
             <View style={styles.cardText}>
                 <Text style={styles.cardTitle} numberOfLines={1}>
@@ -29,7 +34,7 @@ export default function Card({ content }: IProps) {
                 </Text>
                 <Text style={styles.cardDate}>{content.date}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 

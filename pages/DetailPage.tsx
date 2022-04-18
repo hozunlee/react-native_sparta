@@ -1,5 +1,4 @@
-import React from "react";
-import { useTailwind } from "tailwind-rn";
+import React, { useEffect, useState } from "react";
 import main from "./assets/main.png";
 import {
     StyleSheet,
@@ -11,10 +10,27 @@ import {
 } from "react-native";
 import data from "../data.json";
 
-export default function DetailPage() {
+export default function DetailPage({ navigation, route }) {
     console.disableYellowBox = true;
-    let tip = data.tip;
-    const tailwind = useTailwind();
+
+    const [tip, setTip] = useState({});
+    // let tip = data.tip;
+
+    useEffect(() => {
+        console.log(route);
+
+        navigation.setOptions({
+            //setOptions로 페이지 타이틀도 지정 가능하고
+            title: route.params.title,
+            //StackNavigator에서 작성했던 옵션을 다시 수정할 수도 있습니다.
+            headerStyle: {
+                backgroundColor: "#000",
+                shadowColor: "#000",
+            },
+            headerTintColor: "#fff",
+        });
+        setTip(route.params);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -22,12 +38,12 @@ export default function DetailPage() {
                 style={styles.mainImage}
                 resizeMode={"cover"}
                 source={{
-                    uri: tip[9].image,
+                    uri: tip.image,
                 }}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.mainText}>{tip[9].title}</Text>
-                <Text style={styles.subText}>{tip[9].desc}</Text>
+                <Text style={styles.mainText}>{tip.title}</Text>
+                <Text style={styles.subText}>{tip.desc}</Text>
                 <TouchableOpacity style={styles.btn}>
                     <Text style={styles.btnText}>팁 찜하기</Text>
                 </TouchableOpacity>

@@ -2,16 +2,21 @@ import React from "react";
 import AboutPage from "./pages/AboutPage";
 import DetailPage from "./pages/DetailPage";
 import MainPage from "./pages/MainPage";
-import { TailwindProvider } from "tailwind-rn";
-import utilities from "./tailwind.json";
+
+import { StatusBar } from "expo-status-bar";
+
+import { NavigationContainer } from "@react-navigation/native";
+import StackNavigator from "./navigation/StackNavigator";
 
 export default function App() {
     // return <MainPage />;
     // return <AboutPage />;
     return (
-        <TailwindProvider utilities={utilities}>
+        <NavigationContainer>
+            <StatusBar style="black" />
             {/* <DetailPage /> */}
-            <MainPage />
-        </TailwindProvider>
+            <StackNavigator />
+            {/* <MainPage /> */}
+        </NavigationContainer>
     );
 }
