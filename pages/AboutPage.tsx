@@ -9,11 +9,14 @@ import {
     ScrollView,
 } from "react-native";
 
+import { StatusBar } from "expo-status-bar";
+
 export default function App() {
     console.disableYellowBox = true;
 
     return (
         <View style={styles.container}>
+            <StatusBar style="light" />
             <Text style={styles.title}>
                 HI! 스파르타코딩 앱개발을 시작했습니다. 잘부탁드립니다!
             </Text>

@@ -117,9 +117,7 @@ export default function MainPage({ navigation, route }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.middleButton04}
-                    onPress={() => {
-                        category("꿀팁 찜");
-                    }}
+                    onPress={() => navigation.navigate("LikePage")}
                 >
                     <Text style={styles.middleButtonText}>꿀팁 찜</Text>
                 </TouchableOpacity>

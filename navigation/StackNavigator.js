@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DetailPage from "../pages/DetailPage";
 import MainPage from "../pages/MainPage";
 import AboutPage from "../pages/AboutPage";
+import LikePage from "../pages/LikePage";
 
 //스택 네비게이션 라이브러리가 제공해주는 여러 기능이 담겨있는 객체를 사용합니다
 //그래서 이렇게 항상 상단에 선언하고 시작하는게 규칙입니다!
@@ -33,6 +34,13 @@ const StackNavigator = () => {
             {/* 컴포넌트를 페이지로 만들어주는 엘리먼트에 끼워 넣습니다. 이 자체로 이제 페이지 기능을 합니다*/}
             <Stack.Screen name="MainPage" component={MainPage} />
             <Stack.Screen name="DetailPage" component={DetailPage} />
+            <Stack.Screen
+                name="LikePage"
+                component={LikePage}
+                options={{
+                    title: "꿀팁 찜",
+                }}
+            />
             <Stack.Screen
                 name="AboutPage"
                 component={AboutPage}
