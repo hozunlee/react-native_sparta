@@ -9,10 +9,15 @@ import {
     ScrollView,
 } from "react-native";
 
+import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
 
-export default function App() {
+export default function About() {
     console.disableYellowBox = true;
+
+    const link = () => {
+        Linking.openURL("https://www.instagram.com/common.hoya/");
+    };
 
     return (
         <View style={styles.container}>
@@ -34,7 +39,7 @@ export default function App() {
                 <Text style={styles.subText}>
                     꼭 완주해서 나의 것으로 만들어 가겠습니다.
                 </Text>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={() => link()}>
                     <Text style={styles.btnText}>인스타계정</Text>
                 </TouchableOpacity>
             </View>
