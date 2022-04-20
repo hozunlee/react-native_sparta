@@ -13,6 +13,7 @@ import data from "../data.json";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
 import * as Location from "expo-location";
+import axios from "axios";
 
 export default function MainPage({ navigation, route }) {
     console.disableYellowBox = true;
@@ -22,6 +23,12 @@ export default function MainPage({ navigation, route }) {
     const [state, setState] = useState([]);
     //카테고리에 따라 다른 꿀팁을 그때그때 저장관리할 상태
     const [cateState, setCateState] = useState([]);
+
+    //날씨 데이터 상태관리 상태 생성!
+    const [weather, setWeather] = useState({
+        temp: 0,
+        condition: "",
+    });
 
     //컴포넌트에 상태를 여러개 만들어도 됨
     //관리할 상태이름과 함수는 자유자재로 정의할 수 있음
@@ -49,7 +56,20 @@ export default function MainPage({ navigation, route }) {
             //자바스크립트 함수의 실행순서를 고정하기 위해 쓰는 async,await
             await Location.requestPermissionsAsync();
             const locationData = await Location.getCurrentPositionAsync();
-            console.log(locationData);
+
+            const latitude = locationData["coords"]["latitude"];
+            const longitude = locationData["coords"]["longitude"];
+            const API_KEY = "cfc258c75e1da2149c33daffd07a911d";
+            const result = await axios.get(
+                `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+            );
+
+            console.log(result);
+            const temp = result.data.main.temp;
+            const condition = result.data.weather[0].main;
+            const name = result.data.name;
+            console.log(name);
+            setWeather({ temp, condition, name });
         } catch (error) {
             Alert.alert("위치를 찾을 수가 없습니다.", "앱을 껏다 켜볼까요?");
         }
@@ -81,7 +101,8 @@ export default function MainPage({ navigation, route }) {
     */
         <ScrollView style={styles.container}>
             <Text style={styles.weather}>
-                오늘의 날씨: {todayWeather + "°C " + todayCondition}
+                오늘의 날씨:{" "}
+                {`${weather.temp}°C ${weather.condition} ${weather.name}`}
             </Text>
             <View>
                 <TouchableOpacity
