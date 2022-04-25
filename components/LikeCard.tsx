@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { firebase_db } from "../firebaseConfig";
+import * as Application from "expo-application";
 
 interface IProps {
     content: IContents;
@@ -16,8 +18,32 @@ interface IContents {
 
 //비구조 할당 방식으로 넘긴 속성 데이터를 꺼내 사용함
 
-export default function LikeCard({ content, navigation }: IProps) {
-    console.log("콘텐츠찍어보기>>>", content.idx);
+export default function LikeCard({ content, navigation, reload }: IProps) {
+    const isIOS = Platform.OS === "ios";
+
+    const remove = async () => {
+        //고유 ID 발급받는 expo application
+        let uniqueId;
+        if (isIOS) {
+            let iosId = await Application.getIosIdForVendorAsync();
+            uniqueId = iosId;
+        } else {
+            uniqueId = Application.androidId;
+        }
+
+        console.log(uniqueId);
+        firebase_db
+            .ref("/like/" + uniqueId + "/" + content.idx)
+            .remove()
+            .then(function () {
+                console.log("Remove succeeded.");
+                reload();
+            })
+            .catch(function (error) {
+                console.log("Remove failed: " + error.message);
+            });
+    };
+
     return (
         <View style={styles.allCard}>
             <View style={styles.card}>
@@ -44,7 +70,7 @@ export default function LikeCard({ content, navigation }: IProps) {
                 >
                     <Text style={styles.btnText}>자세히 보기</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn} onPress={null}>
+                <TouchableOpacity style={styles.btn} onPress={() => remove()}>
                     <Text style={styles.btnText}>찜 취소</Text>
                 </TouchableOpacity>
             </View>

@@ -53,11 +53,31 @@ export default function LikePage({ navigation }) {
                 console.log("불러온", tip);
 
                 if (tip.length !== 0) {
-                    setTip(tip);
+                    setTip(Object.values(tip));
                     setReady(false);
                 }
             });
     }, []);
+
+    const reload = () => {
+        let uniqueId = Application.androidId;
+
+        console.log(uniqueId);
+
+        firebase_db
+            .ref("/like/" + uniqueId)
+            .once("value")
+            .then((snapshot) => {
+                console.log("파이어베이스에서 찜 데이터 가져왔습니다!!");
+                let tip = snapshot.val();
+                console.log("불러온", tip);
+
+                if (tip.length !== 0) {
+                    setTip(Object.values(tip));
+                    setReady(false);
+                }
+            });
+    };
 
     return ready ? (
         <Loading />
@@ -70,6 +90,7 @@ export default function LikePage({ navigation }) {
                         content={content}
                         key={i}
                         navigation={navigation}
+                        reload={reload}
                     />
                 );
             })}
