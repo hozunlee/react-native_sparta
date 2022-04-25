@@ -21,7 +21,7 @@ export default function Card({ content, navigation }: IProps) {
         <TouchableOpacity
             style={styles.card}
             onPress={() => {
-                navigation.navigate("DetailPage", content);
+                navigation.navigate("DetailPage", { idx: content.idx });
             }}
         >
             <Image style={styles.cardImage} source={{ uri: content.image }} />
