@@ -13,6 +13,9 @@ import {
 } from "react-native";
 import data from "../data.json";
 import * as Linking from "expo-linking";
+import * as Application from "expo-application";
+
+import { firebase_db } from "../firebaseConfig";
 
 import { StatusBar } from "expo-status-bar";
 
@@ -21,6 +24,7 @@ LogBox.ignoreAllLogs();
 export default function DetailPage({ navigation, route }) {
     const [tip, setTip] = useState({});
     // let tip = data.tip;
+    const isIOS = Platform.OS === "ios";
 
     useEffect(() => {
         console.log(route);
@@ -35,11 +39,33 @@ export default function DetailPage({ navigation, route }) {
             },
             headerTintColor: "#fff",
         });
-        setTip(route.params);
+        const { idx } = route.params;
+        firebase_db
+            .ref("/tip/" + idx)
+            .once("value")
+            .then((snapshot) => {
+                let tip = snapshot.val();
+                setTip(tip);
+            });
     }, []);
 
-    const popup = () => {
-        Alert.alert("팝업!!");
+    const like = async () => {
+        //고유 ID 발급받는 expo application
+        let uniqueId;
+        if (isIOS) {
+            let iosId = await Application.getIosIdForVendorAsync();
+            uniqueId = iosId;
+        } else {
+            uniqueId = Application.androidId;
+        }
+
+        console.log(uniqueId);
+        firebase_db
+            .ref("/like/" + uniqueId + "/" + tip.idx)
+            .set(tip, function (error) {
+                console.log(error);
+                Alert.alert("찜 완료!");
+            });
     };
 
     const share = () => {
@@ -66,10 +92,7 @@ export default function DetailPage({ navigation, route }) {
                 <Text style={styles.mainText}>{tip.title}</Text>
                 <Text style={styles.subText}>{tip.desc}</Text>
                 <View style={styles.buttonGroup}>
-                    <TouchableOpacity
-                        style={styles.btn}
-                        onPress={() => popup()}
-                    >
+                    <TouchableOpacity style={styles.btn} onPress={() => like()}>
                         <Text style={styles.btnText}>팁 찜하기</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
