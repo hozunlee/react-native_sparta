@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { firebase_db } from "../firebaseConfig";
+import * as Application from "expo-application";
 import {
     StyleSheet,
     Text,
@@ -10,11 +12,13 @@ import {
 } from "react-native";
 import Card from "../components/Card";
 import LikeCard from "../components/LikeCard";
+import Loading from "../components/Loading";
 
 LogBox.ignoreAllLogs();
 
 export default function LikePage({ navigation }) {
-    const [tip, setTip] = useState([
+    const [ready, setReady] = useState(true);
+    const [tip, setTip]: object[] = useState([
         {
             idx: 3,
             category: "재테크",
@@ -33,12 +37,40 @@ export default function LikePage({ navigation }) {
         },
     ]);
 
-    return (
+    const isIOS = Platform.OS === "ios";
+
+    useEffect(() => {
+        let uniqueId = Application.androidId;
+
+        console.log(uniqueId);
+
+        firebase_db
+            .ref("/like/" + uniqueId)
+            .once("value")
+            .then((snapshot) => {
+                console.log("파이어베이스에서 찜 데이터 가져왔습니다!!");
+                let tip = snapshot.val();
+                console.log("불러온", tip);
+
+                if (tip.length !== 0) {
+                    setTip(tip);
+                    setReady(false);
+                }
+            });
+    }, []);
+
+    return ready ? (
+        <Loading />
+    ) : (
         <ScrollView style={styles.cardContainer}>
             {/* 하나의 카드 영역을 나타내는 View */}
             {tip.map((content, i) => {
                 return (
-                    <Card content={content} key={i} navigation={navigation} />
+                    <LikeCard
+                        content={content}
+                        key={i}
+                        navigation={navigation}
+                    />
                 );
             })}
         </ScrollView>

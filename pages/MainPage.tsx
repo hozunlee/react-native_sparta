@@ -72,11 +72,9 @@ export default function MainPage({ navigation, route }) {
                 `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
             );
 
-            console.log(result);
             const temp = result.data.main.temp;
             const condition = result.data.weather[0].main;
             const name = result.data.name;
-            console.log(name);
             setWeather({ temp, condition, name });
             setReady(false);
         } catch (error) {
@@ -94,6 +92,7 @@ export default function MainPage({ navigation, route }) {
                     return d.category == cate;
                 })
             );
+            console.log(cateState);
         }
     };
 
