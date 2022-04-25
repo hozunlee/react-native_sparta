@@ -7,14 +7,15 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
+    LogBox,
 } from "react-native";
 
 import * as Linking from "expo-linking";
 import { StatusBar } from "expo-status-bar";
 
-export default function About() {
-    console.disableYellowBox = true;
+LogBox.ignoreAllLogs();
 
+export default function About() {
     const link = () => {
         Linking.openURL("https://www.instagram.com/common.hoya/");
     };
