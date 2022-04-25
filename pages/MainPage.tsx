@@ -8,15 +8,18 @@ import {
     TouchableOpacity,
     ScrollView,
     Alert,
+    LogBox,
 } from "react-native";
-import data from "../data.json";
+// import data from "../data.json";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
 import * as Location from "expo-location";
 import axios from "axios";
+import { firebase_db } from "../firebaseConfig";
+
+LogBox.ignoreAllLogs();
 
 export default function MainPage({ navigation, route }) {
-    console.disableYellowBox = true;
     //return 구문 밖에서는 슬래시 두개 방식으로 주석
 
     //기존 꿀팁을 저장하고 있을 상태
@@ -43,18 +46,23 @@ export default function MainPage({ navigation, route }) {
                 title: "나만의 꿀팁",
             });
             //꿀팁 데이터로 모두 초기화 준비
-            let tip = data.tip;
-            setState(tip);
-            setCateState(tip);
-            getLocation();
-            setReady(false);
-        }, 1000);
+            firebase_db
+                .ref("/tip")
+                .once("value")
+                .then((snapshot) => {
+                    console.log("파이어베이스에서 데이터 가져왔습니다!!");
+                    let tip = snapshot.val();
+                    setState(tip);
+                    setCateState(tip);
+                    getLocation();
+                });
+        }, 500);
     }, []);
 
     const getLocation = async (params: type) => {
         try {
             //자바스크립트 함수의 실행순서를 고정하기 위해 쓰는 async,await
-            await Location.requestPermissionsAsync();
+            await Location.requestForegroundPermissionsAsync();
             const locationData = await Location.getCurrentPositionAsync();
 
             const latitude = locationData["coords"]["latitude"];
@@ -70,6 +78,7 @@ export default function MainPage({ navigation, route }) {
             const name = result.data.name;
             console.log(name);
             setWeather({ temp, condition, name });
+            setReady(false);
         } catch (error) {
             Alert.alert("위치를 찾을 수가 없습니다.", "앱을 껏다 켜볼까요?");
         }
@@ -101,8 +110,8 @@ export default function MainPage({ navigation, route }) {
     */
         <ScrollView style={styles.container}>
             <Text style={styles.weather}>
-                오늘의 날씨:{" "}
-                {`${weather.temp}°C ${weather.condition} ${weather.name}`}
+                {`오늘의 날씨:
+                ${weather.temp}°C ${weather.condition} ${weather.name}`}
             </Text>
             <View>
                 <TouchableOpacity
