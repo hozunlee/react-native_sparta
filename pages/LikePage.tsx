@@ -6,13 +6,14 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
+    LogBox,
 } from "react-native";
 import Card from "../components/Card";
 import LikeCard from "../components/LikeCard";
 
-export default function LikePage({ navigation }) {
-    console.disableYellowBox = true;
+LogBox.ignoreAllLogs();
 
+export default function LikePage({ navigation }) {
     const [tip, setTip] = useState([
         {
             idx: 3,

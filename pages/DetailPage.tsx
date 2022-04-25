@@ -9,15 +9,16 @@ import {
     ScrollView,
     Alert,
     Share,
+    LogBox,
 } from "react-native";
 import data from "../data.json";
 import * as Linking from "expo-linking";
 
 import { StatusBar } from "expo-status-bar";
 
-export default function DetailPage({ navigation, route }) {
-    console.disableYellowBox = true;
+LogBox.ignoreAllLogs();
 
+export default function DetailPage({ navigation, route }) {
     const [tip, setTip] = useState({});
     // let tip = data.tip;
 
