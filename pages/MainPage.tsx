@@ -9,6 +9,7 @@ import {
     ScrollView,
     Alert,
     LogBox,
+    Platform,
 } from "react-native";
 // import data from "../data.json";
 import Card from "../components/Card";
@@ -16,6 +17,14 @@ import Loading from "../components/Loading";
 import * as Location from "expo-location";
 import axios from "axios";
 import { firebase_db } from "../firebaseConfig";
+
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+    setTestDeviceIDAsync,
+} from "expo-ads-admob";
 
 LogBox.ignoreAllLogs();
 
@@ -166,7 +175,6 @@ export default function MainPage({ navigation, route }) {
                 </TouchableOpacity>
             </ScrollView>
             <View style={styles.cardContainer}>
-                {/* 하나의 카드 영역을 나타내는 View */}
                 {cateState.map((content, i) => {
                     return (
                         <Card
@@ -176,6 +184,28 @@ export default function MainPage({ navigation, route }) {
                         />
                     );
                 })}
+                {/* <AdMobBanner
+                    bannerSize="fullBanner"
+                    adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                    servePersonalizedAds // true or false
+                    onDidFailToReceiveAdWithError={this.bannerError}
+                /> */}
+
+                {Platform.OS === "ios" ? (
+                    <AdMobBanner
+                        bannerSize="fullBanner"
+                        servePersonalizedAds={true}
+                        adUnitID="ca-app-pub-1938058608987143/9067076278"
+                        style={styles.banner}
+                    />
+                ) : (
+                    <AdMobBanner
+                        bannerSize="fullBanner"
+                        servePersonalizedAds={true}
+                        adUnitID="ca-app-pub-1938058608987143/1188586255"
+                        style={styles.banner}
+                    />
+                )}
             </View>
         </ScrollView>
     );

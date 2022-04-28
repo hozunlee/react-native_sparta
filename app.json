@@ -15,17 +15,23 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "buildNumber": "1.0.0",
+            "bundleIdentifier": "com.myhoneytip_ios_june",
+            "config": {
+                "googleMobileAdsAppId": "ca-app-pub-1938058608987143~9533980132"
+            }
+        },
+        "android": {
+            "package": "com.sparta_reactNative_june",
+            "versionCode": 1,
+            "config": {
+                "googleMobileAdsAppId": "ca-app-pub-1938058608987143~7556212734"
+            }
         },
         "packagerOpts": {
             "sourceExts": ["ts", "tsx", "js"],
             "transformer": "node_modules/react-native-typescript-transformer/index.js"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#FFFFFF"
-            }
         },
         "web": {
             "favicon": "./assets/favicon.png"
